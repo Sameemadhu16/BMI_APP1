@@ -9,6 +9,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int height = 150;
+  int weight = 70;
+  String gender = "";
+
+  late double bmi = calculateBMI(height: height, weight: weight);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,31 +25,61 @@ class _MainPageState extends State<MainPage> {
           color: Colors.white,
           child: Column(
             children: [
-              const Row(
+              Row(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.male,
-                          size: 150,
-                        ),
-                        Text("Male"),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      //print("Male");
+                      setState(() {
+                        gender = 'M';
+                      });
+                    },
+                    child: Container(
+                      height: 200,
+                      width: 175,
+                      decoration: BoxDecoration(
+                          color: gender == 'M'
+                              ? const Color.fromARGB(255, 68, 0, 255)
+                              : const Color.fromARGB(255, 217, 0, 255),
+                          borderRadius: BorderRadius.circular(25)),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.male,
+                            size: 150,
+                          ),
+                          Text("Male"),
+                        ],
+                      ),
                     ),
                   ),
-                  Spacer(),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.female,
-                          size: 150,
-                        ),
-                        Text("Female"),
-                      ],
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      //print("Female");
+                      setState(() {
+                        gender = "F";
+                      });
+                    },
+                    child: Container(
+                      height: 200,
+                      width: 175,
+                      decoration: BoxDecoration(
+                          color: gender == 'F'
+                              ? const Color.fromARGB(255, 255, 0, 230)
+                              : const Color.fromARGB(255, 255, 0, 68),
+                          borderRadius: BorderRadius.circular(25)),
+                      padding: const EdgeInsets.all(8.0),
+                      child: const Column(
+                        children: [
+                          Icon(
+                            Icons.female,
+                            size: 150,
+                          ),
+                          Text("Female"),
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -51,37 +87,49 @@ class _MainPageState extends State<MainPage> {
               const SizedBox(
                 height: 50,
               ),
-              const Row(
+              Row(
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Text("Height"),
+                        const Text("Height"),
                         Text(
-                          "176",
+                          "$height",
                           style: kInputLableColor,
                         ),
                         Row(
                           children: [
                             FloatingActionButton(
-                              onPressed: null,
+                              onPressed: () {
+                                setState(() {
+                                  if (height > 50) height--;
+                                  bmi = calculateBMI(
+                                      height: height, weight: weight);
+                                });
+                              },
                               backgroundColor:
-                                  Color.fromARGB(189, 187, 195, 74),
-                              child: Icon(
+                                  const Color.fromARGB(189, 187, 195, 74),
+                              child: const Icon(
                                 Icons.remove,
                                 size: 40,
                                 color: Colors.red,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             FloatingActionButton(
-                              onPressed: null,
+                              onPressed: () {
+                                setState(() {
+                                  if (height < 250) height++;
+                                  bmi = calculateBMI(
+                                      height: height, weight: weight);
+                                });
+                              },
                               backgroundColor:
-                                  Color.fromARGB(189, 187, 195, 74),
-                              child: Icon(
+                                  const Color.fromARGB(189, 187, 195, 74),
+                              child: const Icon(
                                 Icons.add,
                                 size: 40,
                                 color: Colors.blue,
@@ -92,36 +140,48 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Text("Weight"),
+                        const Text("Weight"),
                         Text(
-                          "76",
+                          "$weight",
                           style: kInputLableColor,
                         ),
                         Row(
                           children: [
                             FloatingActionButton(
-                              onPressed: null,
+                              onPressed: () {
+                                setState(() {
+                                  if (weight > 20) weight--;
+                                  bmi = calculateBMI(
+                                      height: height, weight: weight);
+                                });
+                              },
                               backgroundColor:
-                                  Color.fromARGB(189, 187, 195, 74),
-                              child: Icon(
+                                  const Color.fromARGB(189, 187, 195, 74),
+                              child: const Icon(
                                 Icons.remove,
                                 size: 40,
                                 color: Colors.red,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             FloatingActionButton(
-                              onPressed: null,
+                              onPressed: () {
+                                setState(() {
+                                  if (weight < 350) weight++;
+                                  bmi = calculateBMI(
+                                      height: height, weight: weight);
+                                });
+                              },
                               backgroundColor:
-                                  Color.fromARGB(189, 187, 195, 74),
-                              child: Icon(
+                                  const Color.fromARGB(189, 187, 195, 74),
+                              child: const Icon(
                                 Icons.add,
                                 size: 40,
                                 color: Colors.blue,
@@ -141,10 +201,11 @@ class _MainPageState extends State<MainPage> {
                 children: [
                   const Text("BMI"),
                   Text(
-                    "22.00",
+                    bmi.toStringAsFixed(2),
                     style: kInputLableColor.copyWith(
                         color: kOutputTextColor, fontSize: 60),
                   ),
+                  Text(getResult(bmi))
                 ],
               )
             ],
@@ -152,5 +213,19 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
     ));
+  }
+
+  double calculateBMI({required int height, required int weight}) {
+    return weight / (height * height) * 10000;
+  }
+
+  String getResult(bmiValue) {
+    if (bmiValue >= 25) {
+      return 'Overweight';
+    } else if (bmiValue > 18.5) {
+      return 'Normal';
+    } else {
+      return 'Underweight';
+    }
   }
 }
